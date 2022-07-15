@@ -11,8 +11,24 @@ GET https://api.npms.io/v2/search/suggestions?q=react
 
 */
 
-module.exports = async function oldestPackageName() {
-  // TODO
+const axios = require('axios');
 
-  return name
-};
+async function oldestPackageName() {
+  const res = await axios.get(
+    'https://api.npms.io/v2/search/suggestions?q=react'
+  );
+
+  const packages = res.data.map(
+    ({ package: { date } }) => (date = Date.parse(date))
+  );
+
+  const oldestDate = Math.min(...packages);
+  const oldestPackage = res.data.filter(
+    ({ package: { date } }) => Date.parse(date) === oldestDate
+  );
+
+  const result = oldestPackage[0].package.name;
+  return result;
+}
+
+module.exports = oldestPackageName;
