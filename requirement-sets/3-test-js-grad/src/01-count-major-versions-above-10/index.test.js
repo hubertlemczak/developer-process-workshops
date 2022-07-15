@@ -17,7 +17,6 @@ describe('countMajorVersionsAbove10', () => {
 
   it('returns the correct count of packages above version 10.x.x', async () => {
     const answer = await countMajorVersionsAbove10();
-    console.log('ans', answer);
     expect(answer).toEqual(4);
   });
 });
