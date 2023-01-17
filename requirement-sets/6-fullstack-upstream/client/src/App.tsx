@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import RestaurantDetails from './components/RestaurantDetails';
 import Search from './components/Search';
-import { IOpeningHours } from './utils/format-hours';
+import formatHours, { IOpeningHours } from './utils/format-hours';
 
 export interface IRestaurantDetails {
   name: string;
@@ -15,11 +15,20 @@ export interface IRestaurantDetails {
 
 function App() {
   const [restaurantData, setRestaurantData] = useState<IRestaurantDetails>();
+  const formattedOpeningTimes = formatHours(restaurantData?.opening_hours.days);
 
   return (
     <div className="container">
       <Search {...{ setRestaurantData }} />
-      <RestaurantDetails {...{ restaurantData }} />
+      {formattedOpeningTimes && restaurantData && (
+        <RestaurantDetails
+          {...{
+            name: restaurantData.name,
+            location: restaurantData.location,
+            formattedOpeningTimes,
+          }}
+        />
+      )}
     </div>
   );
 }

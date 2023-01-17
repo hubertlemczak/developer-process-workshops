@@ -75,22 +75,15 @@ code {
   color: rgb(58, 58, 58);
 }
 
-.hours {
-  display: flex;
-  flex-wrap: wrap;
-  list-style: none;
-  gap: 10px;
-}
-
 .hours > li {
+  display: flex;
+  justify-content: space-between;
   flex: 1 0 50%;
   text-transform: capitalize;
+  text-align: right;
+  margin-bottom: 10px;
 }
 
 li {
   list-style: none;
-}
-
-.hour-range {
-  text-align: right;
 }

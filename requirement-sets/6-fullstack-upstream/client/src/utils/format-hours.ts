@@ -8,14 +8,9 @@ export interface IHoursObj {
   type: string;
 }
 
-interface IReturnType {
-  day: string;
-  time: string;
-}
-
-interface IGroupedDays {
-  days: string[];
-  times: string[];
+export interface IFormattedHours {
+  days: string;
+  openingHours: string;
 }
 
 const DAYS_OF_THE_WEEK = [
@@ -28,18 +23,42 @@ const DAYS_OF_THE_WEEK = [
   'sunday',
 ];
 
-export default function formatHours(days: IOpeningHours): IReturnType[] {
-  const groupedDays = Object.entries(days).reduce((acc, curr) => {
-    console.log(acc, curr);
+export default function formatHours(
+  days: IOpeningHours | undefined
+): IFormattedHours[] | undefined {
+  if (!days) return;
 
-    return [...acc];
-  }, []);
+  const groupedDays = new Map();
+  let openingTime;
+  for (let day of DAYS_OF_THE_WEEK) {
+    const dayHours = days[day];
 
-  const formattedHours: IReturnType[] = [];
+    if (dayHours) {
+      openingTime = dayHours
+        .map((time) => `${time.start} - ${time.end}`)
+        .join('\n');
+    } else {
+      openingTime = 'closed';
+    }
+
+    const currentTime = groupedDays.get(openingTime);
+    if (currentTime) {
+      groupedDays.set(openingTime, [...currentTime, day]);
+    } else {
+      groupedDays.set(openingTime, [day]);
+    }
+  }
+
+  const formattedHours: IFormattedHours[] = [];
+  groupedDays.forEach((days, openingHours) => {
+    formattedHours.push({
+      days:
+        days.length === 1
+          ? `${days[0]}`
+          : `${days[0]} - ${days[days.length - 1]}`,
+      openingHours,
+    });
+  });
 
   return formattedHours;
-}
-
-function addClosedDays(openingTimes: any) {
-  return;
 }

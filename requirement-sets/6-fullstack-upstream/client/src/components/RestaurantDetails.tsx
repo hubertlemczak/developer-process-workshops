@@ -1,28 +1,36 @@
 import React from 'react';
-import { IRestaurantDetails } from '../App';
-import formatHours, { IHoursObj } from '../utils/format-hours';
+import { IFormattedHours, IHoursObj } from '../utils/format-hours';
+import '../index.css';
 
-function RestaurantDetails({
-  restaurantData,
-}: {
-  restaurantData: IRestaurantDetails | undefined;
-}) {
+interface IProps {
+  name: string;
+  location: string;
+  formattedOpeningTimes: IFormattedHours[];
+}
+
+function RestaurantDetails({ name, location, formattedOpeningTimes }: IProps) {
   return (
     <div className="restaurant-details">
       <div className="left">
-        <h1>{restaurantData?.name}</h1>
-        <p>{restaurantData?.location}</p>
+        <h1>{name}</h1>
+        <p>{location}</p>
       </div>
       <div className="right">
         <h2>Opening Hours</h2>
         <ul className="hours">
-          {restaurantData &&
-            Object.entries(restaurantData.opening_hours.days).map((day, i) => (
-              <React.Fragment key={i}>
-                <li>{day[0]}</li>
-                <Times times={day[1]} />
-              </React.Fragment>
-            ))}
+          {formattedOpeningTimes?.map((days, i) => (
+            <li key={i}>
+              <span>{days.days}</span>
+              <div>
+                {days.openingHours.split('\n').map((time) => (
+                  <>
+                    <span>{time}</span>
+                    <br />
+                  </>
+                ))}
+              </div>
+            </li>
+          ))}
         </ul>
       </div>
     </div>
